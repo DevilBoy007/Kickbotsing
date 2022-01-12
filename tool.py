@@ -12,26 +12,35 @@ c_options=Options() # create options object for chrome
 
 s = Service(ChromeDriverManager().install())    # set up manager service for chromedriver
 browser = webdriver.Chrome(service = s)#, options = c_options) # instantiate chromedriver
+# Nike resources
+nikeSNKRSfeed = 'https://www.nike.com/launch'
+nikeSNKRSinstock = 'https://www.nike.com/launch?s=in-stock'
+nikeSNKRSupcoming = 'https://www.nike.com/launch?s=upcoming'
+nikeTWITTER = 'https://twitter.com/nikestore'   #Twitter link
 
-link = 'https://twitter.com/nikestore'   #Twitter link
-shoe_keyword = 'Crimson'   #enter keyword of shoe you are trying to get
+shoe_keyword = input('enter a keyword to search for: ')   #enter keyword of shoe you are trying to get
+##############################################################
+def search(link: str) -> bool:
+    browser.get(link)
+    time.sleep(1)
+    source = browser.page_source
+    shoe_found = shoe_keyword in source
+    if(shoe_found):
+        print('found shoes!')
+        return
+    else:
+        browser.refresh()
+##############################################################
 #browser.maximize_window() # For maximizing window
-
-browser.get(link)
 
 while True:
     time.sleep(1)
-    source = browser.page_source #downloads page source
-    shoe_live = shoe_keyword in source  #checks page source for shoe using keywords
-
-    if shoe_live == True:
-        print('Found shoes')  #exits loop continues on to fetch link
-        break
-    else:
-      browser.refresh()   #refresh browser
-    time.sleep(14) #refreshes every 15 seconds
-
-
+    search(nikeSNKRSfeed)
+    search(nikeSNKRSinstock)
+    search(nikeSNKRSupcoming)
+    time.sleep(4) #refreshes every 5 seconds
+browser.quit()
+'''
 while True: #press on tweet
     try:
         tweet = browser.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/main/div/div/div/div[1]/div/div[2]/div/div/div[2]/section/div/div/div[1]').click()
@@ -45,3 +54,4 @@ while True:
         break
     except:
         pass
+'''
