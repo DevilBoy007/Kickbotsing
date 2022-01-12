@@ -27,18 +27,20 @@ def search(link: str) -> bool:
     shoe_found = shoe_keyword in source
     if(shoe_found):
         print('found shoes!')
-        return
+        return True
     else:
         browser.refresh()
 ##############################################################
 #browser.maximize_window() # For maximizing window
 
 while True:
-    time.sleep(1)
-    search(nikeSNKRSfeed)
-    search(nikeSNKRSinstock)
-    search(nikeSNKRSupcoming)
-    time.sleep(4) #refreshes every 5 seconds
+    if (search(nikeSNKRSfeed)):
+        break
+    if (search(nikeSNKRSinstock)):
+        break
+    if (search(nikeSNKRSupcoming)):
+        break
+    time.sleep(5) #refreshes every 5 seconds
 browser.quit()
 '''
 while True: #press on tweet
