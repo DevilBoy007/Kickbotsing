@@ -8,30 +8,33 @@ from selenium.webdriver.common.by import By
 '''CHROMEDRIVER SETUP'''
 
 c_options=Options() # create options object for chrome
-#c_options.add_argument('--headless')   # to scrape web without displaying window
+c_options.add_argument('--headless')   # to scrape web without displaying window
 
 s = Service(ChromeDriverManager().install())    # set up manager service for chromedriver
-browser = webdriver.Chrome(service = s)#, options = c_options) # instantiate chromedriver
+browser = webdriver.Chrome(service = s, options = c_options) # instantiate chromedriver
 # Nike resources
 nikeSNKRSfeed = 'https://www.nike.com/launch'
 nikeSNKRSinstock = 'https://www.nike.com/launch?s=in-stock'
 nikeSNKRSupcoming = 'https://www.nike.com/launch?s=upcoming'
 nikeTWITTER = 'https://twitter.com/nikestore'   #Twitter link
-
-shoe_keyword = input('enter a keyword to search for: ')   #enter keyword of shoe you are trying to get
+#nike = [nikeSNKRSfeed, nikeSNKRSinstock, nikeSNKRSupcoming, nikeTWITTER]
+keywords = input('enter a keywords to search for: ').split()   #enter keyword of shoe you are trying to get
 ##############################################################
 def search(link: str) -> bool:
+    keyword_matches = []
     browser.get(link)
-    time.sleep(1)
     source = browser.page_source
-    shoe_found = shoe_keyword in source
-    if(shoe_found):
+    for shoe_keyword in keywords:
+        if shoe_keyword in source:
+            keyword_matches.append(True)
+        else:
+            continue
+    if(all(keyword_matches)):
         print('found shoes!')
         return True
     else:
         browser.refresh()
 ##############################################################
-#browser.maximize_window() # For maximizing window
 
 while True:
     if (search(nikeSNKRSfeed)):
@@ -39,6 +42,8 @@ while True:
     if (search(nikeSNKRSinstock)):
         break
     if (search(nikeSNKRSupcoming)):
+        break
+    if (search(nikeTWITTER)):
         break
     time.sleep(5) #refreshes every 5 seconds
 browser.quit()
