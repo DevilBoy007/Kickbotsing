@@ -18,25 +18,32 @@ nikeSNKRSinstock = 'https://www.nike.com/launch?s=in-stock'
 nikeSNKRSupcoming = 'https://www.nike.com/launch?s=upcoming'
 nikeTWITTER = 'https://twitter.com/nikestore'   #Twitter link
 #nike = [nikeSNKRSfeed, nikeSNKRSinstock, nikeSNKRSupcoming, nikeTWITTER]
-keywords = input('enter a keywords to search for: ').split()   #enter keyword of shoe you are trying to get
+keywords = input('enter a keywords to search for: ')   #enter keyword of shoe you are trying to get
 ##############################################################
 def search(link: str) -> bool:
     keyword_matches = []
     browser.get(link)
     source = browser.page_source
-    for shoe_keyword in keywords:
+    for shoe_keyword in keywords.split():
         if shoe_keyword in source:
+            print('keyword match found! {}'.format(shoe_keyword))
             keyword_matches.append(True)
         else:
-            continue
+            print('keyword not found: {}'.format(shoe_keyword))
+            keyword_matches.append(False)
+    if keywords in source:
+        print('exact match detected!')
+    else:
+        print('not an exact match')
     if(all(keyword_matches)):
         print('found shoes!')
         return True
     else:
         browser.refresh()
 ##############################################################
-
-while True:
+iteration = 1
+while True: # break out of this loop once we find the item we are looking for
+    print('iteration {}'.format(iteration))
     if (search(nikeSNKRSfeed)):
         break
     if (search(nikeSNKRSinstock)):
@@ -45,7 +52,8 @@ while True:
         break
     if (search(nikeTWITTER)):
         break
-    time.sleep(5) #refreshes every 5 seconds
+    iteration += 1
+    time.sleep(2) #refreshes every 2 seconds
 browser.quit()
 '''
 while True: #press on tweet
